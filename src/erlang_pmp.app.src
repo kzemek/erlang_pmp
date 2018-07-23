@@ -1,0 +1,15 @@
+{application, erlang_pmp,
+ [{description, "FlameGraph compatible, Poor Man's Profiler inspired Erlang profiler"},
+  {vsn, "0.1.0"},
+  {registered, []},
+  {applications,
+   [kernel,
+    stdlib
+   ]},
+  {env,[]},
+  {modules, []},
+
+  {maintainers, []},
+  {licenses, ["Apache 2.0"]},
+  {links, [{"GitHub", "https://github.com/kzemek/erlang_pmp"}]}
+ ]}.
