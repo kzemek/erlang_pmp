@@ -56,12 +56,9 @@ profile(Opts) ->
 profile(End, Processes, Sleep, ShowPid, Filename, IncludedStatuses, ShowStatus, State) ->
     case erlang:monotonic_time() > End of
         true ->
-            case file:open(Filename, [raw, write, delayed_write, {encoding, utf8}]) of
-                {error, _} = Err -> Err;
-                {ok, File} ->
-                    write_state(File, State),
-                    ok = file:close(File)
-            end;
+            {ok, File} = file:open(Filename, [raw, write, delayed_write]),
+            write_state(File, State),
+            ok = file:close(File);
 
         false ->
             State2 = single_pass(process_list(Processes), ShowPid, IncludedStatuses, ShowStatus, State),
