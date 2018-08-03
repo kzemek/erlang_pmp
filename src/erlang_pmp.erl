@@ -18,11 +18,24 @@
 -author('konrad.zemek@erlang-solutions.com').
 
 %% API exports
--export([profile/1]).
+-export([profile/1, profile_sync/1]).
 
 %%====================================================================
 %% API functions
 %%====================================================================
+
+profile_sync(Opts) ->
+    Duration = proplists:get_value(duration, Opts, 60),
+    Pid = profile(Opts),
+    Ref = monitor(process, Pid),
+    receive
+        {'DOWN', Ref, process, Pid, normal} -> ok;
+        {'DOWN', Ref, process, Pid, X} -> {error, X}
+    after
+        timer:seconds(Duration * 2) ->
+            exit(Pid, kill),
+            {error, timeout}
+    end.
 
 profile(Opts) ->
     Duration = proplists:get_value(duration, Opts, 60),
@@ -34,7 +47,7 @@ profile(Opts) ->
     ShowStatus = proplists:get_value(show_status, Opts, false),
 
     End = erlang:monotonic_time() + erlang:convert_time_unit(Duration, seconds, native),
-    spawn_link(fun() -> profile(End, Processes, Sleep, ShowPid, Filename, IncludedStatuses, ShowStatus, #{}) end).
+    spawn(fun() -> profile(End, Processes, Sleep, ShowPid, Filename, IncludedStatuses, ShowStatus, #{}) end).
 
 %%====================================================================
 %% Internal functions
