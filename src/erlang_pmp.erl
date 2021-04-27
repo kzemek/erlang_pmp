@@ -110,5 +110,5 @@ sleep(Time) -> timer:sleep(Time).
 to_name([] = _Name, Pid) -> Pid;
 to_name(Name, _Pid) when is_atom(Name) -> Name.
 
-process_list(all) -> erlang:processes();
+process_list(all) -> erlang:processes() -- [self()];
 process_list([Pid | _] = Processes) when is_pid(Pid) -> Processes.
