@@ -31,3 +31,17 @@ The output of `erlang_pmp` is meant to be used with [FlameGraph stack trace visu
 git clone https://github.com/brendangregg/FlameGraph.git
 FlameGraph/flamegraph.pl /tmp/erlang_pmp.trace > /tmp/erlang_pmp.svg
 ```
+
+#### Examples
+
+The below example is useful in scenarios when we want to sample all processes to get an idea of the overall system profile. We omit the `waiting` state to focus on busy processes only.
+
+```
+erlang_pmp:profile([{duration, 30}, {include_statuses, [exiting, garbage_collecting, running, runnable, suspended]}, {show_status, true}, {show_pid, true}]).
+```
+
+If the system has many processes, we sample stacks less frequently and don't show individual pids:
+
+```
+erlang_pmp:profile([{duration, 30}, {include_statuses, [exiting, garbage_collecting, running, runnable, suspended]}, {show_status, true}, {sleep,50}]).
+```
