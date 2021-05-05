@@ -34,6 +34,12 @@ FlameGraph/flamegraph.pl /tmp/erlang_pmp.trace > /tmp/erlang_pmp.svg
 
 #### Examples
 
+First it is good to increase the depth of captured call stacks, which by default are 8 frames only.
+
+```
+erlang:system_flag(backtrace_depth, 128).
+```
+
 The below example is useful in scenarios when we want to sample all processes to get an idea of the overall system profile. We omit the `waiting` state to focus on busy processes only.
 
 ```
